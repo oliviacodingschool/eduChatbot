@@ -28,7 +28,6 @@ def build_faiss_index(sentences):
 
 index, embeddings = build_faiss_index(sentences)
 
-st.set_page_config(page_title="초등학생 AI 챗봇")
 st.title("📘 초등학생 AI 챗봇")
 st.markdown("내가 배운 지식으로만 대답해요!")
 
