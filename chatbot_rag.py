@@ -10,7 +10,7 @@ def load_model():
 
 model = load_model()
 
-def load_knowledge(file_path="data/knowledge.txt"):
+def load_knowledge(file_path="eduChatbot/knowledge.txt"):
     if not os.path.exists(file_path):
         return []
     with open(file_path, "r", encoding="utf-8") as f:
@@ -41,4 +41,4 @@ if st.button("질문하기") and user_input:
     if best_score < 1.0:
         st.markdown(f"**챗봇:** {matched_answer}")
     else:
-        st.markdown("**챗봇:** 잘 모르겠어요. 다른 걸 물어봐 주세요.")
+        st.markdown("**챗봇:** 다른 방식으로 질문해줄래요?")
