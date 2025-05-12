@@ -3,6 +3,7 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 import os
+st.set_page_config(page_title="초등학생 AI 챗봇")
 
 @st.cache_resource
 def load_model():
