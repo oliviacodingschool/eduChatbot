@@ -37,7 +37,7 @@ if st.button("질문하기") and user_input:
     D, I = index.search(np.array(query_vec), k=1)
     best_score = D[0][0]
     matched_answer = sentences[I[0][0]]
-
+    print(matched_answer)
     if best_score < 10.0:
         st.markdown(f"**챗봇:** {matched_answer}")
     else:
