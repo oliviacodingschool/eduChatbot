@@ -38,7 +38,7 @@ if st.button("질문하기") and user_input:
     best_score = D[0][0]
     matched_answer = sentences[I[0][0]]
     st.markdown(matched_answer)
-    if best_score < 10.0:
-        st.markdown(f"**챗봇:** {matched_answer}")
+    if best_score > 100.0:
+        st.markdown(f"**챗봇:** 질문이 잘 이해되지 않습니다. 다른 방식으로 질문해주세요. 6Quiz를 활용해봐요!")
     else:
-        st.markdown("**챗봇:** 다른 방식으로 질문해줄래요?")
+        st.markdown("**챗봇:** {matched_answer}")
