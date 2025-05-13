@@ -47,11 +47,12 @@ if st.button("질문하기") and user_input:
             matched_answer = answer
             break
     
-# 키워드로 매칭된 게 없다면 첫 번째 후보 사용
-if not matched_answer:
-    matched_answer = candidate_answers[0]
+    # 키워드로 매칭된 게 없다면 첫 번째 후보 사용
+    if not matched_answer:
+        matched_answer = candidate_answers[0]
 
 st.markdown(matched_answer)
+
 if best_score > 500.0:
     st.markdown(f"**챗봇:** 질문이 잘 이해되지 않습니다. 다른 방식으로 질문해주세요. 6Quiz를 활용해봐요!")
 else:
