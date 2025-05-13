@@ -40,13 +40,13 @@ if st.button("질문하기") and user_input:
     candidate_answers = [sentences[i] for i in I[0]]
     st.markdown(f"**챗봇:** {candidate_answers}")
     
-keywords = ["인구", "사람"]
-matched_answer=None
-for answer in candidate_answers:
-    if any(kw in answer for kw in keywords):
-        matched_answer = answer
-        break
-
+    keywords = ["인구", "사람"]
+    matched_answer=None
+    for answer in candidate_answers:
+        if any(kw in answer for kw in keywords):
+            matched_answer = answer
+            break
+    
 # 키워드로 매칭된 게 없다면 첫 번째 후보 사용
 if not matched_answer:
     matched_answer = candidate_answers[0]
