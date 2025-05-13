@@ -34,8 +34,21 @@ st.markdown("내가 배운 지식으로만 대답해요!")
 user_input = st.text_input("무엇이 궁금한가요?")
 if st.button("질문하기") and user_input:
     query_vec = model.encode([user_input])
-    D, I = index.search(np.array(query_vec), k=1)
+    D, I = index.search(np.array(query_vec), k=2)
     best_score = D[0][0]
+
+    candidate_answers = [sentences[i] for i in I[0]]
+    keywords = ["인구", "사람"]
+    matched_answer=None
+    for answer in candidate_answers:
+        if any(kw in answer for kw in keywords):
+            matched_answer = answer
+            break
+
+    # 키워드로 매칭된 게 없다면 첫 번째 후보 사용
+    if not matched_answer:
+        matched_answer = candidate_answers[0]
+    
     matched_answer = sentences[I[0][0]]
     st.markdown(matched_answer)
     if best_score > 500.0:
