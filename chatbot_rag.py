@@ -38,6 +38,7 @@ if st.button("질문하기") and user_input:
     best_score = D[0][0]
 
     candidate_answers = [sentences[i] for i in I[0]]
+    st.markdown(f"**챗봇:** {candidate_answers}")
     keywords = ["인구", "사람"]
     matched_answer=None
     for answer in candidate_answers:
