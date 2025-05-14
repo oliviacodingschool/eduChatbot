@@ -20,6 +20,8 @@ def load_data():
 
 heritage_data = load_data()
 
+
+
 # 세션 상태 초기화
 if "shown_names" not in st.session_state:
     st.session_state["shown_names"] = []
@@ -32,6 +34,10 @@ districts = ['동래구', '사하구', '금정구', '서구', '북구', '수영�
 st.title("🏛️ 부산 문화유산 챗봇")
 question = st.text_input("궁금한 걸 물어보세요. 예: '조선시대 해운대구 유형문화유산 알려줘'")
 search = st.button("질문하기")
+
+if st.button("초기화"):
+    st.session_state["shown_names"] = []
+    st.success("초기화되었습니다!")
 
 if search:
     if not question:
