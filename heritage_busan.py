@@ -58,6 +58,7 @@ if search:
             top_n_indices = torch.topk(scores, top_n).indices.tolist()
             top_n_scores = scores[top_n_indices].tolist()
             top_n_filtered_data = [filtered_data[i] for i in top_n_indices]
+            st.markdown(top_n_filtered_data)
             
             # 랜덤으로 하나를 선택
             selected = random.choice(top_n_filtered_data)
