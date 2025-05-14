@@ -20,34 +20,42 @@ def load_data():
 
 heritage_data = load_data()
 
+# 세션 상태 초기화
+if "shown_names" not in st.session_state:
+    st.session_state["shown_names"] = []
+
 # 구 리스트
 districts = ['동래구', '사하구', '금정구', '서구', '북구', '수영구', '부산진구', '강서구',
              '남구', '영도구', '기장군', '사상구', '해운대구', '동구']
 
 # Streamlit 인터페이스
 st.title("🏛️ 부산 문화유산 챗봇")
-question = st.text_input("궁금한 걸 물어보세요. 종류, 시대, 주소, 지정날짜를 알 수 있어요. 예: '조선시대 해운대구 유형문화유산 알려줘'")
+question = st.text_input("궁금한 걸 물어보세요. 예: '조선시대 해운대구 유형문화유산 알려줘'")
 search = st.button("질문하기")
 
 if search:
     if not question:
         st.warning("질문을 입력해주세요.")
     else:
-        # 1차 필터링: 종류 기반
-        if "유형문화유산" in question:
-            filtered_data = [item for item in heritage_data if "유형문화유산" in item.get("종류", "")]
-        elif "무형유산" in question or "무형문화유산" in question:
-            filtered_data = [item for item in heritage_data if "무형유산" in item.get("종류", "") or "무형문화유산" in item.get("종류", "")]
-        else:
-            filtered_data = heritage_data
+        # 1차 필터링: 이전에 보여준 항목 제외
+        filtered_data = [
+            item for item in heritage_data 
+            if item.get("이름") not in st.session_state["shown_names"]
+        ]
 
-        # 2차 필터링: 주소 기반
+        # 2차 필터링: 종류 기반
+        if "유형문화유산" in question:
+            filtered_data = [item for item in filtered_data if "유형문화유산" in item.get("종류", "")]
+        elif "무형유산" in question or "무형문화유산" in question:
+            filtered_data = [item for item in filtered_data if "무형유산" in item.get("종류", "") or "무형문화유산" in item.get("종류", "")]
+        
+        # 3차 필터링: 주소 기반
         selected_districts = [d for d in districts if d in question]
         if selected_districts:
             filtered_data = [item for item in filtered_data if any(d in item.get("주소", "") for d in selected_districts)]
 
         if not filtered_data:
-            st.error("해당 조건에 맞는 문화유산을 찾을 수 없습니다.")
+            st.error("더 이상 조건에 맞는 새로운 문화유산을 찾을 수 없습니다.")
         else:
             # 문장 생성
             sentences = [
@@ -55,23 +63,26 @@ if search:
                 for item in filtered_data
             ]
 
-            # 문장 임베딩 및 질문 임베딩
+            # 임베딩 비교
             heritage_embeddings = model.encode(sentences, convert_to_tensor=True)
             question_embedding = model.encode(question, convert_to_tensor=True)
             scores = util.cos_sim(question_embedding, heritage_embeddings)[0]
 
-            # 상위 N개 추출 후 랜덤
+            # 상위 N개 중 무작위
             top_n = min(20, len(scores))
             top_n_indices = torch.topk(scores, top_n).indices.tolist()
             top_n_filtered_data = [filtered_data[i] for i in top_n_indices]
             top_n_scores = [scores[i].item() for i in top_n_indices]
 
-            # 랜덤으로 하나 선택
+            # 랜덤 선택
             combined = list(zip(top_n_filtered_data, top_n_scores))
             random.shuffle(combined)
             selected, best_score = combined[0]
-            
-            # 결과 출력
+
+            # 이전에 보여준 이름 기록
+            st.session_state["shown_names"].append(selected["이름"])
+
+            # 출력
             st.markdown(f"""
 ### 🏷️ {selected['이름']}
 - 📍 주소: {selected['주소']}
