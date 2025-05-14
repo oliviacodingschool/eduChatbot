@@ -69,7 +69,7 @@ if search:
             scores = util.cos_sim(question_embedding, heritage_embeddings)[0]
 
             # 상위 N개 중 무작위
-            top_n = min(20, len(scores))
+            top_n = min(100, len(scores))
             top_n_indices = torch.topk(scores, top_n).indices.tolist()
             top_n_filtered_data = [filtered_data[i] for i in top_n_indices]
             top_n_scores = [scores[i].item() for i in top_n_indices]
