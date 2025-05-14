@@ -25,6 +25,8 @@ heritage_data = load_data()
 # 세션 상태 초기화
 if "shown_names" not in st.session_state:
     st.session_state["shown_names"] = []
+if "history" not in st.session_state:
+    st.session_state["history"] = []
 
 # 구 리스트
 districts = ['동래구', '사하구', '금정구', '서구', '북구', '수영구', '부산진구', '강서구',
@@ -75,7 +77,7 @@ if search:
             scores = util.cos_sim(question_embedding, heritage_embeddings)[0]
 
             # 상위 N개 중 무작위
-            top_n = min(100, len(scores))
+            top_n = min(20, len(scores))
             top_n_indices = torch.topk(scores, top_n).indices.tolist()
             top_n_filtered_data = [filtered_data[i] for i in top_n_indices]
             top_n_scores = [scores[i].item() for i in top_n_indices]
@@ -89,7 +91,7 @@ if search:
             st.session_state["shown_names"].append(selected["이름"])
 
             # 출력
-            st.markdown(f"""
+            answer = st.markdown(f"""
 ### 🏷️ {selected['이름']}
 - 📍 주소: {selected['주소']}
 - 📜 시대: {selected['시대'] or '정보 없음'}
@@ -100,3 +102,14 @@ if search:
 - 🛠️ 관리자: {selected.get('관리자', '정보 없음')}
 - 🔍 유사도 점수: `{best_score:.2f}`
 """)
+            st.markdown(answer)
+            # 기록 저장(최신순)
+            st.session_state["history"].insert(0, (question, answer))
+
+# 이전 기록 보여주기
+if st.session_state["history"]:
+    st.markdown("---")
+    st.subheader("📜 이전 질문 기록")
+    for idx, (prev_q, prev_a) in enumerate(st.session_state["history"], 1):
+        with st.expander(f"Q{idx}: {prev_q}", expanded=False):
+            st.markdown(prev_a)
