@@ -67,10 +67,10 @@ if search:
             top_n_scores = [scores[i].item() for i in top_n_indices]
 
             # 랜덤으로 하나 선택
-            selected_index = random.randint(0, len(top_n_filtered_data) - 1)
-            selected = top_n_filtered_data[selected_index]
-            best_score = top_n_scores[selected_index]
-
+            combined = list(zip(top_n_filtered_data, top_n_scores))
+            random.shuffle(combined)
+            selected, best_score = combined[0]
+            
             # 결과 출력
             st.markdown(f"""
 ### 🏷️ {selected['이름']}
