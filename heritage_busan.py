@@ -2,6 +2,7 @@ import streamlit as st
 import json
 from sentence_transformers import SentenceTransformer, util
 import torch
+import random
 
 # 모델 로드 (캐싱)
 @st.cache_resource
