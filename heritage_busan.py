@@ -29,11 +29,10 @@ if search:
         st.warning("질문을 입력해주세요.")
     else:
         # 질문 내 의도 파악
-        question_lower = question.lower()
-        if "유형문화유산" in question_lower:
+        if "유형문화유산" in question:
             filtered_data = [item for item in heritage_data if "유형문화유산" in item.get("종류", "")]
-        elif "무형문화유산" in question_lower:
-            filtered_data = [item for item in heritage_data if "무형문화유산" in item.get("종류", "")]
+        elif ("무형문화유산" or "무형유산") in question:
+            filtered_data = [item for item in heritage_data if ("무형문화유산" or "무형유산") in item.get("종류", "")]
         else:
             filtered_data = heritage_data  # 전체 검색
 
