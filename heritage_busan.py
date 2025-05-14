@@ -91,7 +91,7 @@ if search:
             st.session_state["shown_names"].append(selected["이름"])
 
             # 출력
-            answer = st.markdown(f"""
+            answer = f"""
 ### 🏷️ {selected['이름']}
 - 📍 주소: {selected['주소']}
 - 📜 시대: {selected['시대'] or '정보 없음'}
@@ -101,7 +101,7 @@ if search:
 - 👤 소유자: {selected.get('소유자', '정보 없음')}
 - 🛠️ 관리자: {selected.get('관리자', '정보 없음')}
 - 🔍 유사도 점수: `{best_score:.2f}`
-""")
+"""
             st.markdown(answer)
             # 기록 저장(최신순)
             st.session_state["history"].insert(0, (question, answer))
