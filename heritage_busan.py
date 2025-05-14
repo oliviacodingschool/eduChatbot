@@ -51,6 +51,17 @@ if search:
             # 질문 임베딩 및 유사도 계산
             question_embedding = model.encode(question, convert_to_tensor=True)
             scores = util.cos_sim(question_embedding, heritage_embeddings)[0]
+
+            # 상위 N개의 유사도 높은 항목을 선택 (예: 5개)
+            top_n = 20
+            top_n_indices = torch.topk(scores, top_n).indices.tolist()
+            top_n_scores = scores[top_n_indices].tolist()
+            top_n_filtered_data = [filtered_data[i] for i in top_n_indices]
+            
+            # 랜덤으로 하나를 선택
+            selected = random.choice(top_n_filtered_data)
+            best_score = max(top_n_scores)  # 가장 높은 유사도 점수
+            
             best_index = torch.argmax(scores).item()
             best_score = scores[best_index].item()
             selected = filtered_data[best_index]
