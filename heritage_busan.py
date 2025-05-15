@@ -42,14 +42,24 @@ st.markdown("""
     table.custom-table th, table.custom-table td {
         border: 1px solid #ddd;
         padding: 8px 12px;
-        text-align: center;
     }
     table.custom-table th {
         background-color: #0078d7;
         color: white;
         font-weight: bold;
+        text-align: center;
     }
-    table.custom-table tr:nth-child(even){background-color: #f2f2f2;}
+    table.custom-table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    table.custom-table tbody td:first-child {
+        width: 25%;
+        font-weight: bold;
+        text-align: left;
+    }
+    table.custom-table tbody td:last-child {
+        text-align: left;
+    }
 </style>
 
 <table class="custom-table">
@@ -66,6 +76,7 @@ st.markdown("""
     </tbody>
 </table>
 """, unsafe_allow_html=True)
+
 
 question = st.text_input("궁금한 걸 물어보세요. 예: '조선시대 해운대구 유형문화유산 알려줘'")
 search = st.button("질문하기")
