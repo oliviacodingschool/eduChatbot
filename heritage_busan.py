@@ -67,8 +67,8 @@ if search:
             selected_districts = [d for d in districts if d in question]
         
         if selected_districts:
-            filtered_data = [
-                item for item in filtered_data
+            filtered = [
+                item for item in filtered
                 if any(d in item.get("주소", "") for d in selected_districts)
             ]
 
