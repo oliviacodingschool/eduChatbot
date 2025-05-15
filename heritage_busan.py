@@ -72,6 +72,20 @@ if search:
                 if any(d in item.get("주소", "") for d in selected_districts)
             ]
 
+        # 시대 리스트
+        eras = ['조선시대', '삼한시대', '일제강점기', '기타', '백제', '고려시대', '삼국시대', '대한제국시대', '가야']
+        
+        # 시대 필터
+        matched_era = None
+        for era in eras:
+            if era in question:
+                matched_era = era
+                break
+        
+        if matched_era:
+            filtered = [item for item in filtered if item.get("시대") == matched_era]
+
+
 
         # --- 필터 후 결과 없음
         if not filtered:
