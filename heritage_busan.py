@@ -59,9 +59,10 @@ if search:
         selected_districts = [d for d in districts if d in question]
         
         def exact_district_match(district, address):
-            pattern = r'\b' + re.escape(district) + r'\b'
-            return re.search(pattern, address) is not None
+            words = re.findall(r'\b\w+구\b', address)
+            return district in words
         
+        selected_districts = [d for d in districts if d in question]
         if selected_districts:
             filtered = [
                 item for item in filtered
