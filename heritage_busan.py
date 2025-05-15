@@ -63,8 +63,8 @@ if search:
             return re.search(pattern, address) is not None
         
         if selected_districts:
-            filtered_data = [
-                item for item in filtered_data
+            filtered = [
+                item for item in filtered
                 if any(exact_district_match(d, item.get("주소", "")) for d in selected_districts)
             ]
 
