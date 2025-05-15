@@ -31,6 +31,42 @@ districts = ['동래구', '사하구', '금정구', '서구', '북구', '수영�
              '남구', '영도구', '기장군', '사상구', '해운대구', '동구']
 
 st.title("🏛️ 부산 문화유산 챗봇")
+st.markdown("""
+<style>
+    table.custom-table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 20px;
+        font-family: Arial, sans-serif;
+    }
+    table.custom-table th, table.custom-table td {
+        border: 1px solid #ddd;
+        padding: 8px 12px;
+        text-align: center;
+    }
+    table.custom-table th {
+        background-color: #0078d7;
+        color: white;
+        font-weight: bold;
+    }
+    table.custom-table tr:nth-child(even){background-color: #f2f2f2;}
+</style>
+
+<table class="custom-table">
+    <thead>
+        <tr>
+            <th>구분</th>
+            <th>내용</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>유산 종류</td><td>유형문화유산, 무형유산</td></tr>
+        <tr><td>시대</td><td>조선시대, 삼한시대, 일제강점기, 기타, 백제, 고려시대, 삼국시대, 대한제국시대, 가야</td></tr>
+        <tr><td>지역</td><td>동래구, 사하구, 금정구, 서구, 북구, 수영구, 부산진구, 강서구, 남구, 영도구, 기장군, 사상구, 해운대구, 동구</td></tr>
+    </tbody>
+</table>
+""", unsafe_allow_html=True)
+
 question = st.text_input("궁금한 걸 물어보세요. 예: '조선시대 해운대구 유형문화유산 알려줘'")
 search = st.button("질문하기")
 
