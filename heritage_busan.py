@@ -3,6 +3,7 @@ import json
 import random
 from sentence_transformers import SentenceTransformer, util
 import torch
+import re
 
 # 모델 로드
 @st.cache_resource
@@ -53,14 +54,18 @@ if search:
             filtered = [item for item in filtered if "유형" in item.get("종류", "")]
         elif "무형" in question:
             filtered = [item for item in filtered if "무형" in item.get("종류", "")]
-
-        # --- 3차 필터: 지역 필터
-        matched_districts = [d for d in districts if d in question]
-        if matched_districts:
-            filtered = [
-                item for item in filtered
-                if any(d in item.get("주소", "") for d in matched_districts)
-            ]
+             
+        # 3. 지역 필터 
+        selected_districts = [d for d in districts if d in question]
+        
+        def exact_district_match(district, address):
+            pattern = r'\b' + re.escape(district) + r'\b'
+            return re.search(pattern, address) is not None
+        
+        if selected_districts:
+            filtered_data = [
+                item for item in filtered_data
+                if any(exact_district_match(d, item.get("주소", "")) for d in selected_districts)
 
         # --- 필터 후 결과 없음
         if not filtered:
