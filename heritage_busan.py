@@ -66,6 +66,7 @@ if search:
             filtered_data = [
                 item for item in filtered_data
                 if any(exact_district_match(d, item.get("주소", "")) for d in selected_districts)
+            ]
 
         # --- 필터 후 결과 없음
         if not filtered:
