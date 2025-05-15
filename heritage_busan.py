@@ -56,18 +56,22 @@ if search:
             filtered = [item for item in filtered if "무형" in item.get("종류", "")]
              
         # 3. 지역 필터 
-        selected_districts = [d for d in districts if d in question]
+        # 3차 필터링: 주소 기반
+        if "강서구" in question:
+            selected_districts = ["강서구"]
+        elif "서구" in question:
+            # '강서구'가 없고 '서구'가 있을 때만 서구로 필터링
+            selected_districts = ["서구"]
+        else:
+            # 그 외 지역은 기존 방식 유지
+            selected_districts = [d for d in districts if d in question]
         
-        def exact_district_match(district, address):
-            words = re.findall(r'\b\w+구\b', address)
-            return district in words
-        
-        selected_districts = [d for d in districts if d in question]
         if selected_districts:
-            filtered = [
-                item for item in filtered
-                if any(exact_district_match(d, item.get("주소", "")) for d in selected_districts)
+            filtered_data = [
+                item for item in filtered_data
+                if any(d in item.get("주소", "") for d in selected_districts)
             ]
+
 
         # --- 필터 후 결과 없음
         if not filtered:
