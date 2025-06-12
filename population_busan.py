@@ -28,8 +28,8 @@ def build_faiss_index(sentences):
 
 index, embeddings = build_faiss_index(sentences)
 
-st.title("📘 초등학생 AI 챗봇")
-st.markdown("내가 배운 지식으로만 대답해요!")
+st.title("📘 갈매기반을 위한 초등학생 AI 챗봇")
+st.markdown("인구 데이터를 담고 있는 챗봇이에요")
 
 user_input = st.text_input("무엇이 궁금한가요?")
 if st.button("질문하기") and user_input:
