@@ -3,6 +3,7 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 import torch
+import os
 
 st.set_page_config(page_title="재생에너지 AI 챗봇")
 
