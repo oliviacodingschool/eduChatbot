@@ -51,15 +51,21 @@ def build_faiss_index(sentences):
 
 # 질문 처리
 if st.button("질문하기") and user_input:
-    index, searchable_sentences = build_faiss_index(sentences)
-
-    query_vec = model.encode([user_input], convert_to_numpy=True, device=DEVICE)
-    D, I = index.search(np.array(query_vec), k=1)
-
-    if D[0][0] > 500.0:
-        matched_answer = "잘 이해되지 않아요. 다시 질문해 주세요!"
+    if "1인당" in user_input and "온실가스" in user_input:
+        matched_answer = "세계 평균 1인당 온실가스 배출량은 약 4.8톤입니다."
+    elif "세계" in user_input and "온실가스" in user_input:
+        matched_answer = "2023년 기준 전 세계 온실가스 배출량은 약 370억 톤입니다."
     else:
-        matched_answer = searchable_sentences[I[0][0]]
+    # faiss 검색        
+        index, searchable_sentences = build_faiss_index(sentences)
+    
+        query_vec = model.encode([user_input], convert_to_numpy=True, device=DEVICE)
+        D, I = index.search(np.array(query_vec), k=1)
+    
+        if D[0][0] > 500.0:
+            matched_answer = "잘 이해되지 않아요. 다시 질문해 주세요!"
+        else:
+            matched_answer = searchable_sentences[I[0][0]]
 
     st.markdown(f"**챗봇:** {matched_answer}")
     st.session_state["history"].insert(0, (user_input, matched_answer))
