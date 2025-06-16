@@ -5,7 +5,7 @@ import numpy as np
 import os
 import torch
 
-st.set_page_config(page_title="초등학생 AI 챗봇")
+st.set_page_config(page_title="구포초등학교 AI 챗봇")
 
 # CUDA 디바이스 설정
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -43,8 +43,9 @@ if "history" not in st.session_state:
     st.session_state["history"] = []
 
 # UI
-st.title("📘 구포4-1반 초등 AI 챗봇")
-st.markdown("인구, 면적 데이터를 담고 있는 챗봇이에요")
+st.title("🕊️ 구포4-1반 초등 AI 챗봇")
+st.markdown("<h3 style='color:#0078D7;'>인구, 면적 데이터를 담고 있는 챗봇이에요</h3>", unsafe_allow_html=True)
+
 
 # 초기화 버튼
 if st.button("초기화"):
