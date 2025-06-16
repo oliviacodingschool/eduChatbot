@@ -19,13 +19,13 @@ def load_model():
 
 model = load_model()
 
-def load_knowledge(file_path="energy2.txt"):
+def load_knowledge(file_path):
     if not os.path.exists(file_path):
         return []
     with open(file_path, "r", encoding="utf-8") as f:
         return [line.strip() for line in f if line.strip()]
-
-sentences = load_knowledge()
+file_path="energy2.txt"
+sentences = load_knowledge(file_path)
 
 # 세션 상태 초기화
 if "history" not in st.session_state:
