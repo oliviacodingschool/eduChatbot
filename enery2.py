@@ -18,7 +18,7 @@ def load_model():
 
 model = load_model()
 
-def load_knowledge(file_path="knowledge.txt"):
+def load_knowledge(file_path="energy2.txt"):
     if not os.path.exists(file_path):
         return []
     with open(file_path, "r", encoding="utf-8") as f:
