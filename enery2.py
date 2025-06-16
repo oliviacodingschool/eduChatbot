@@ -51,7 +51,7 @@ def build_faiss_index(sentences):
 
 # 질문 처리
 if st.button("질문하기") and user_input:
-    index, searchable_sentences = build_faiss_index(KNOWLEDGE)
+    index, searchable_sentences = build_faiss_index(sentences)
 
     query_vec = model.encode([user_input], convert_to_numpy=True, device=DEVICE)
     D, I = index.search(np.array(query_vec), k=1)
