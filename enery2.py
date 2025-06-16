@@ -52,9 +52,9 @@ def build_faiss_index(sentences):
 # 질문 처리
 if st.button("질문하기") and user_input:
     if "1인당" in user_input and "온실가스" in user_input:
-        matched_answer = "세계 평균 1인당 온실가스 배출량은 약 4.8톤입니다."
+        matched_answer = sentences[1]
     elif "세계" in user_input and "온실가스" in user_input:
-        matched_answer = "2023년 기준 전 세계 온실가스 배출량은 약 370억 톤입니다."
+        matched_answer = sentences[3]
     else:
     # faiss 검색        
         index, searchable_sentences = build_faiss_index(sentences)
