@@ -13,7 +13,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # 모델 로딩
 @st.cache_resource
 def load_model():
-    model = SentenceTransformer('kykim/bert-kor-base')
+    model = SentenceTransformer('jhgan/ko-sbert-sts')
     model.to(torch.device(DEVICE))
     return model
 
