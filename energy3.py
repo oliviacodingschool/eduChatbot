@@ -33,7 +33,7 @@ if "history" not in st.session_state:
 
 # UI
 st.title("🌱 재생에너지3 AI 챗봇")
-st.markdown("<h3 style='color:#28a745;'>물 사용량, 온실가스, 탄소 배출량 등에 대해 알려드려요</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='color:#28a745;'>음식물 쓰레기, 재활용 쓰레기, 에어컨과 선풍기 보급률, 석유와 재생에너지 소비 등에 대해 알려드려요</h3>", unsafe_allow_html=True)
 
 # 초기화 버튼
 if st.button("초기화"):
