@@ -66,7 +66,7 @@ if st.button("질문하기") and user_input:
     else:
         # 면적 질문일 경우 4번째 문장 출력
         if "면적" in user_input:
-            matched_answer = random.choice([FULL_KNOWLEDGE[3]])
+            matched_answer = random.choice([FULL_KNOWLEDGE[3],FULL_KNOWLEDGE[4]])
 
         # 시도 관련 질문일 경우 3번째 문장 출력
         elif any(tag in user_input for tag in TAG_SENTENCES):
