@@ -4,6 +4,7 @@ import faiss
 import numpy as np
 import os
 import torch
+import random
 
 st.set_page_config(page_title="구포초등학교 AI 챗봇")
 
@@ -65,7 +66,7 @@ if st.button("질문하기") and user_input:
     else:
         # 면적 질문일 경우 4번째 문장 출력
         if "면적" in user_input:
-            matched_answer = FULL_KNOWLEDGE[3]
+            matched_answer = random.choice([FULL_KNOWLEDGE[3]])
 
         # 시도 관련 질문일 경우 3번째 문장 출력
         elif any(tag in user_input for tag in TAG_SENTENCES):
