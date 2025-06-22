@@ -29,6 +29,10 @@ with open("jeju_busan_json.txt", "r", encoding="utf-8") as f:
 if "history" not in st.session_state:
     st.session_state["history"] = []
 
+
+# 질문 입력
+user_input = st.text_input("무엇이 궁금한가요?")
+
 # 버튼 나란히
 col1, col2 = st.columns([1, 1])
 with col1:
@@ -37,10 +41,7 @@ with col2:
     if st.button("초기화"):
         st.session_state["history"] = []
         st.success("기록이 초기화되었습니다!")
-
-# 질문 입력
-user_input = st.text_input("무엇이 궁금한가요?")
-
+        
 # FAISS 인덱스 구축
 def build_faiss_index(data):
     search_sentences = [d["search"] for d in data]
@@ -69,13 +70,13 @@ if 질문하기 and user_input:
     <div style="
         border: 1.5px solid #87ceeb;
         border-radius: 10px;
-        padding: 15px;
+        padding: 10px;
         max-width: 700px;
         font-size: 16px;
-        line-height: 1.4;
+        line-height: 1.6;
         white-space: pre-wrap;
     ">
-        <span>💡 <strong>챗봇:</strong></span>
+        💡 <strong>챗봇:</strong>
         <div style="margin-left: 3.5em;">
             {matched_answer}
         </div>
