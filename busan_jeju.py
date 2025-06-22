@@ -59,7 +59,7 @@ category_indexes, category_answers = build_indexes()
 # 답변 검색 함수
 def find_best_answer(user_input, threshold=0.45):
     user_vec = model.encode([user_input])
-    best_score = 100
+    best_score = 0.25
     best_answer = None
 
     for category, index in category_indexes.items():
