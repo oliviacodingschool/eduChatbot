@@ -70,11 +70,8 @@ if 질문하기 and user_input:
     <div style="
         border: 1.5px solid #87ceeb;
         border-radius: 10px;
-        padding: 10px;
-        max-width: 700px;
         font-size: 16px;
         line-height: 1.6;
-        white-space: pre-wrap;
     ">
         💡 <strong>챗봇:</strong>
         <div style="margin-left: 3.5em;">
