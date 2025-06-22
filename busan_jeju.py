@@ -26,7 +26,7 @@ model = load_model()
 import json
 
 # 텍스트 파일에서 JSON 데이터 불러오기
-with open("knowledge_data.txt", "r", encoding="utf-8") as f:
+with open("jeju_busan_json.txt", "r", encoding="utf-8") as f:
     knowledge_data = json.load(f)
 
 
