@@ -75,7 +75,7 @@ if 질문하기 and user_input:
         line-height: 1.6;
     ">
         💡 <strong>챗봇:</strong>
-        <div style="margin-left: 3.5em;">
+        <div style="margin-left: 1.5em;">
             {matched_answer}
         </div>
     </div>
