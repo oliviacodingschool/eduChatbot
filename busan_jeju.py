@@ -81,4 +81,3 @@ if user_question:
         answer, score = find_best_answer(user_question)
     st.markdown(f"**📌 답변:** {answer}")
     st.caption(f"(유사도 거리: {score:.4f})")  # 거리 작을수록 유사함
-    st.caption(f"(유사도 거리: {:.4f})")  # 거리 작을수록 유사함
