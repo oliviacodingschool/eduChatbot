@@ -2,82 +2,85 @@ import streamlit as st
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
+import torch
+import os
 
 # 페이지 설정
-st.set_page_config(page_title="학생용 AI 챗봇", layout="centered")
-st.title("📘 학생용 AI 챗봇")
-st.markdown("궁금한 걸 입력해 보세요!")
+st.set_page_config(page_title="제주AI챗봇")
+st.title("🌱 4학년1반 제주 AI챗봇!")
+st.markdown("<h3 style='color:#28a745;'>제주도의 지리정보를 알려드려요!</h3>", unsafe_allow_html=True)
 
-# 모델 로딩 (캐시로 메모리 효율화)
+# 디바이스 설정 (GPU 우선)
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+# 모델 캐싱 로딩
 @st.cache_resource
 def load_model():
-    return SentenceTransformer('jhgan/ko-sbert-sts')
+    model = SentenceTransformer('jhgan/ko-sbert-sts')
+    model.to(torch.device(DEVICE))
+    return model
 
 model = load_model()
 
-# 질문-답변 데이터 (카테고리별 분류 포함)
-FAQ_DATA = {
-    "면적": {
-        "부산 면적은 얼마인가요?": "부산의 면적은 약 770km²(제곱킬로미터)입니다.",
-        "제주도 면적은 얼마인가요?": "제주도 면적은 1846km²(제곱키로미터)입니다."
-    },
-    "인구": {
-        "부산 인구가 얼마인가요?": "부산 인구를 알려드립니다. 2025년 기준 부산의 인구수는 남자 158만 5597명 여자 167만 3622명이고, 남녀를 합친 총 인구수는 약 325만 9219명입니다.",
-        "제주도 인구가 얼마인가요?": "제주도 인구를 알려드립니다. 2025년 기준 남자 33만 3318명 여자 33만 3925명이고, 남녀를 합친 총 인구수는 약 66만 7739명입니다."
-    },
-    "기온": {
-        "2024년 부산 평균 기온은?": "2024년 부산 평균 기온에 대해 알려드릴게요. 봄 14.7도, 여름 25.9도, 가을 20도, 겨울 6.1도 입니다.",
-        "2024년 제주도 평균 기온은?": "2024년 제주도 평균 기온에 대해 알려드릴게요. 봄 15.5도, 여름 27.3도, 가을 21.2도, 겨울 8.7도 입니다."
-    },
-    "강수량": {
-        "부산 최근 강수량은?": "2022년부터 2024년까지 3년간 계절별 부산 강수량 평균은 봄 382mm, 여름 750mm, 가을 438mm, 겨울 149mm 입니다.",
-        "제주 최근 강수량은?": "2022년부터 2024년까지 3년간 계절별 제주도 강수량 평균은 봄 415mm, 여름 692mm, 가을 395mm, 겨울 204mm입니다."
-    }
-}
+# 지식 불러오기 함수
+def load_knowledge(file_path):
+    if not os.path.exists(file_path):
+        return []
+    with open(file_path, "r", encoding="utf-8") as f:
+        return [line.strip() for line in f if line.strip()]
 
-# 카테고리별 FAISS 인덱스와 답변 저장
-@st.cache_resource
-def build_indexes():
-    category_indexes = {}
-    category_answers = {}
+# 지식 파일 경로
+file_path = "energy3.txt"
+sentences = load_knowledge(file_path)
 
-    for category, qa in FAQ_DATA.items():
-        questions = list(qa.keys())
-        answers = list(qa.values())
-        embeddings = model.encode(questions)
+# 세션 상태 초기화
+if "history" not in st.session_state:
+    st.session_state["history"] = []
 
-        index = faiss.IndexFlatL2(embeddings.shape[1])
-        index.add(np.array(embeddings))
+# 초기화 버튼
+if st.button("초기화"):
+    st.session_state["history"] = []
+    st.success("기록이 초기화되었습니다!")
 
-        category_indexes[category] = index
-        category_answers[category] = answers
+# 사용자 질문 입력
+user_input = st.text_input("무엇이 궁금한가요?")
 
-    return category_indexes, category_answers
+# FAISS 인덱스 구축 함수
+def build_faiss_index(sentences):
+    embeddings = model.encode(sentences, convert_to_numpy=True, device=DEVICE)
+    index = faiss.IndexFlatL2(embeddings.shape[1])
+    index.add(np.array(embeddings))
+    return index, sentences
 
-category_indexes, category_answers = build_indexes()
+# 질문 처리 로직
+if st.button("질문하기") and user_input:
 
-# 답변 검색 함수
-def find_best_answer(user_input, threshold=0.45):
-    user_vec = model.encode([user_input])
-    best_score = float('inf')
-    best_answer = None
+    # 1. 키워드 조건 우선 답변
+    if "1인당" in user_input and "온실가스" in user_input:
+        matched_answer = sentences[1] if len(sentences) > 1 else "데이터가 부족해요."
+    elif "세계" in user_input and "온실가스" in user_input:
+        matched_answer = sentences[3] if len(sentences) > 3 else "데이터가 부족해요."
+    else:
+        # 2. FAISS를 통한 문장 유사도 검색
+        index, searchable_sentences = build_faiss_index(sentences)
+        query_vec = model.encode([user_input], convert_to_numpy=True, device=DEVICE)
+        D, I = index.search(np.array(query_vec), k=1)
 
-    for category, index in category_indexes.items():
-        D, I = index.search(np.array(user_vec), k=1)
-        score = D[0][0]
-        if score < best_score:
-            best_score = score
-            best_answer = category_answers[category][I[0][0]]
+        # 3. 유사도 거리 기준 설정 (낮을수록 유사)
+        distance = D[0][0]
+        if distance > 500.0:
+            matched_answer = "잘 이해되지 않아요. 다시 질문해 주세요!"
+        else:
+            matched_answer = searchable_sentences[I[0][0]]
 
-    if best_score > threshold:
-        return "잘 모르겠어요. 다시 질문해 주세요.", best_score
-    return best_answer, best_score
+    # 답변 출력 및 기록 저장
+    st.markdown(f"**챗봇:** {matched_answer}")
+    st.session_state["history"].insert(0, (user_input, matched_answer))
 
-# 사용자 입력
-user_question = st.text_input("질문을 입력해 보세요.", placeholder="예: 부산의 인구는 얼마인가요?")
-
-if user_question:
-    with st.spinner("답변을 찾는 중..."):
-        answer, score = find_best_answer(user_question)
-    st.markdown(f"**📌 답변:** {answer}")
-    st.caption(f"(유사도 거리: {score:.4f})")  # 거리 작을수록 유사함
+# 질문 히스토리 출력
+if st.session_state["history"]:
+    st.markdown("---")
+    st.subheader("📜 이전 질문 기록")
+    for idx, (prev_q, prev_a) in enumerate(st.session_state["history"], 1):
+        with st.expander(f"Q{idx}: {prev_q}", expanded=False):
+            st.markdown(prev_a)
