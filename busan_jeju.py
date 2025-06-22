@@ -7,9 +7,9 @@ import os
 import json
 
 # 페이지 설정
-st.set_page_config(page_title="제주AI챗봇")
-st.title("🌱 4학년1반 제주 AI챗봇!")
-st.markdown("<h3 style='color:#28a745;'>제주도의 지리정보를 알려드려요!</h3>", unsafe_allow_html=True)
+st.set_page_config(page_title="AI챗봇")
+st.title("🌱 구포 4학년1반 AI챗봇!")
+st.markdown("<h3 style='color:#28a745;'>지리정보를 알려드려요!</h3>", unsafe_allow_html=True)
 
 # 디바이스 설정 (GPU 우선)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
