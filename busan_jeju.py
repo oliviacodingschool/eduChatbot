@@ -30,7 +30,7 @@ def load_knowledge(file_path):
         return [line.strip() for line in f if line.strip()]
 
 # 지식 파일 경로
-file_path = "energy3.txt"
+file_path = "jeju_busan.txt"
 sentences = load_knowledge(file_path)
 
 # 세션 상태 초기화
