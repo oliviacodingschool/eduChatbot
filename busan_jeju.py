@@ -67,7 +67,7 @@ if st.button("질문하기") and user_input:
             matched_answer = data_list[I[0][0]]["full"]
 
     # 출력
-    st.markdown(f"**챗봇:** {matched_answer}")
+    st.markdown(f"**💡챗봇:** {matched_answer}", unsafe_allow_html=True)
     st.session_state["history"].insert(0, (user_input, matched_answer))
 
 # 질문 히스토리 출력
