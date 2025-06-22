@@ -23,15 +23,12 @@ def load_model():
 model = load_model()
 
 # 지식 불러오기 함수
-def load_knowledge(file_path):
-    if not os.path.exists(file_path):
-        return []
-    with open(file_path, "r", encoding="utf-8") as f:
-        return [line.strip() for line in f if line.strip()]
+import json
 
-# 지식 파일 경로
-file_path = "jeju_busan.txt"
-sentences = load_knowledge(file_path)
+# 텍스트 파일에서 JSON 데이터 불러오기
+with open("knowledge_data.txt", "r", encoding="utf-8") as f:
+    knowledge_data = json.load(f)
+
 
 # 세션 상태 초기화
 if "history" not in st.session_state:
@@ -46,34 +43,30 @@ if st.button("초기화"):
 user_input = st.text_input("무엇이 궁금한가요?")
 
 # FAISS 인덱스 구축 함수
-def build_faiss_index(sentences):
-    embeddings = model.encode(sentences, convert_to_numpy=True, device=DEVICE)
+def build_faiss_index(data):
+    search_sentences = [d["search"] for d in data]
+    embeddings = model.encode(search_sentences, convert_to_numpy=True, device=DEVICE)
     index = faiss.IndexFlatL2(embeddings.shape[1])
     index.add(np.array(embeddings))
-    return index, sentences
+    return index, data
 
-# 질문 처리 로직
+
 if st.button("질문하기") and user_input:
-
-    # 1. 키워드 조건 우선 답변
+    # 키워드 기반 조건은 동일하게 유지 가능
     if "1인당" in user_input and "온실가스" in user_input:
-        matched_answer = sentences[1] if len(sentences) > 1 else "데이터가 부족해요."
-    elif "세계" in user_input and "온실가스" in user_input:
-        matched_answer = sentences[3] if len(sentences) > 3 else "데이터가 부족해요."
+        matched_answer = knowledge_data[0]["full"]
     else:
-        # 2. FAISS를 통한 문장 유사도 검색
-        index, searchable_sentences = build_faiss_index(sentences)
+        index, data_list = build_faiss_index(knowledge_data)
         query_vec = model.encode([user_input], convert_to_numpy=True, device=DEVICE)
         D, I = index.search(np.array(query_vec), k=1)
 
-        # 3. 유사도 거리 기준 설정 (낮을수록 유사)
         distance = D[0][0]
         if distance > 500.0:
             matched_answer = "잘 이해되지 않아요. 다시 질문해 주세요!"
         else:
-            matched_answer = searchable_sentences[I[0][0]]
+            matched_answer = data_list[I[0][0]]["full"]
 
-    # 답변 출력 및 기록 저장
+    # 출력
     st.markdown(f"**챗봇:** {matched_answer}")
     st.session_state["history"].insert(0, (user_input, matched_answer))
 
