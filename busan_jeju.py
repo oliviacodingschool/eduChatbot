@@ -71,7 +71,7 @@ if 질문하기 and user_input:
         border: 1.5px solid #87ceeb;
         border-radius: 10px;
         font-size: 16px;
-        padding: 2px 2px;
+        padding: 10px 10px;
         line-height: 1.6;
     ">
         💡 <strong>챗봇:</strong>
