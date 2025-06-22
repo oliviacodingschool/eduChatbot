@@ -59,7 +59,7 @@ category_indexes, category_answers = build_indexes()
 # 답변 검색 함수
 def find_best_answer(user_input, threshold=0.45):
     user_vec = model.encode([user_input])
-    best_score = float('inf')
+    best_score = 100
     best_answer = None
 
     for category, index in category_indexes.items():
@@ -81,3 +81,4 @@ if user_question:
         answer, score = find_best_answer(user_question)
     st.markdown(f"**📌 답변:** {answer}")
     st.caption(f"(유사도 거리: {score:.4f})")  # 거리 작을수록 유사함
+    st.caption(f"(유사도 거리: {:.4f})")  # 거리 작을수록 유사함
