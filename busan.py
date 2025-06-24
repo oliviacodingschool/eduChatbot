@@ -23,7 +23,7 @@ def load_model():
 model = load_model()
 
 # 지식 데이터 로딩
-with open("jeju_busan_json.txt", "r", encoding="utf-8") as f:
+with open("busan_json.txt", "r", encoding="utf-8") as f:
     knowledge_data = json.load(f)
 
 if "history" not in st.session_state:
